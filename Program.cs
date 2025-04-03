@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using CourseShopOnline.DataAccess.Context;
+using CourseShopOnline.Interfaces;
 using CourseShopOnline.Models;
+using CourseShopOnline.Services;
 using CourseShopOnline.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -57,7 +59,6 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminPolicy", policy =>
         policy.RequireRole("Admin"));
 });
-
 
 
 var app = builder.Build();

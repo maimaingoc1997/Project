@@ -65,16 +65,8 @@ public class AccountController : Controller
     // GET: /Account/Register
     public IActionResult Register()
     {
-        var model = new RegisterViewModel
-        {
-            // Không bao gồm Admin trong dropdown
-            Roles = new List<SelectListItem>
-            {
-                new SelectListItem { Text = "Student", Value = "Student" },
-                new SelectListItem { Text = "Teacher", Value = "Teacher" }
-            }
-        };
-        return View(model);
+        
+        return View();
     }
 
     // POST: /Account/Register
@@ -82,6 +74,28 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
+        if (string.IsNullOrEmpty(model.Role))
+        {
+            ModelState.AddModelError("Role", "Vui lòng chọn vai trò.");
+        }
+        if (ModelState.ContainsKey("Role"))
+        {
+            var roleErrors = ModelState["Role"].Errors;
+            foreach (var error in roleErrors)
+            {
+                Console.WriteLine(error.ErrorMessage);
+            }
+        }
+        if (!ModelState.IsValid)
+        {
+            foreach (var modelError in ModelState.Values)
+            {
+                foreach (var error in modelError.Errors)
+                {
+                    Console.WriteLine(error.ErrorMessage);  // Log lỗi ra console
+                }
+            }
+        }
         if (ModelState.IsValid)
         {
             var existingUser = await _userManager.FindByNameAsync(model.Email);
@@ -125,13 +139,10 @@ public class AccountController : Controller
                 ModelState.AddModelError(string.Empty, "Có lỗi xảy ra khi tạo tài khoản.");
             }
         }
+        
 
         // Lấy lại danh sách role để hiển thị trong dropdown khi có lỗi
-        model.Roles = new List<SelectListItem>
-        {
-            new SelectListItem { Text = "Student", Value = "Student" },
-            new SelectListItem { Text = "Teacher", Value = "Teacher" }
-        };
+       
         return View(model);
     }
     public async Task<IActionResult> Logout()

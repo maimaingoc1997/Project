@@ -21,8 +21,10 @@ public class RegisterViewModel
     [DataType(DataType.Password)]
     [Compare("Password", ErrorMessage = "Mật khẩu và xác nhận mật khẩu không khớp.")]
     public string ConfirmPassword { get; set; }
+    
+    [Required(ErrorMessage = "Vui lòng chọn vai trò.")]
     public string Role { get; set; }
 
     // Để sử dụng dropdown trong view
-    public List<SelectListItem> Roles { get; set; } 
+    
 }

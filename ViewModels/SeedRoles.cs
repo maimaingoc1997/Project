@@ -32,9 +32,23 @@ public static class SeedRoles
             };
 
             var password = "AdminPassword"; // Đảm bảo thay đổi mật khẩu mạnh
-            await userManager.CreateAsync(user, password);
-            await userManager.AddToRoleAsync(user, "Admin");
+            var result = await userManager.CreateAsync(user, password);
+
+            // Kiểm tra xem người dùng có được tạo thành công không
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, "Admin");
+            }
+            else
+            {
+                // Log lỗi nếu tạo người dùng thất bại
+                foreach (var error in result.Errors)
+                {
+                    Console.WriteLine($"Error creating admin user: {error.Description}");
+                }
+            }
         }
     }
+
 }
 
