@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    
+    <!-- Thêm liên kết đến CSS của Bootstrap và các style riêng -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="bg-light">
+
+    <!-- Phần Header -->
+   <header class="bg-white text-dark ">
+       <nav class="navbar navbar-expand-lg navbar-light container-fluid shadow-md m-0">
+           <!-- Logo bên trái -->
+           <a class="navbar-brand ms-0" href="/">
+               <img src="your_logo.png" alt="Logo" width="30" height="30" class="d-inline-block align-top" />
+               CodeLearn
+           </a>
+   
+           <!-- Menu điều hướng bên trái -->
+           <div class="collapse navbar-collapse" id="navbarNav">
+               <ul class="navbar-nav me-auto">
+                   <li class="nav-item">
+                       <a class="nav-link" href="/">Học tập</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="/LuyenTap">Luyện tập</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="/ThiDau">Thi đấu</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="/SuKien">Sự kiện</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="/NguoiDongGop">Người đóng góp</a>
+                   </li>
+                   <li class="nav-item">
+                       <a class="nav-link" href="/ChiaSe">Chia sẻ</a>
+                   </li>
+               </ul>
+           </div>
+   
+           <!-- Phần hiển thị khi người dùng đã đăng nhập -->
+           <div class="d-flex ">
+               @if (User.Identity.IsAuthenticated)
+               {
+                   <div class="dropdown ">
+                       <!-- Icon người dùng -->
+                       <button class="btn btn-outline-primary dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                           <i class="bi bi-person-circle"></i>
+                       </button>
+                       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                           <li><a class="dropdown-item" href="/Account/Profile">Thông tin tài khoản</a></li>
+                           <li><a class="dropdown-item" href="/Account/Logout">Đăng xuất</a></li>
+                       </ul>
+                   </div>
+               }
+               else
+               {
+                   <!-- Nút Đăng nhập và Đăng ký khi chưa đăng nhập -->
+                   <a class="text-sm text-white bg-blue-600 px-4 py-1 rounded-full mx-2" href="/Account/Login">Đăng nhập</a>
+                   <a class="btn btn-outline-primary mx-2" href="/Account/Register">Đăng ký</a>
+               }
+           </div>
+       </nav>
+   </header>
+
+
+    <!-- Nội dung chính của trang -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Thêm liên kết tới các script của Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+    <!-- Phần Scripts cho phép chèn thêm script từ các views -->
+    @RenderSection("Scripts", required: false)
+</body>
+</html>
