@@ -1,0 +1,70 @@
+@using CourseShopOnline.Models.Enum
+@model IEnumerable<Course>  
+
+@{
+    Layout = null;
+}
+
+<h2 class="text-center mb-4">Danh sách khóa học</h2>
+  <div class="text-center mb-4">
+        <a href="@Url.Action("Create", "Course")" class="btn btn-primary btn-lg">Thêm khóa học</a>
+    </div>
+
+@if (Model.Any())
+{
+    
+    @foreach (var course in Model)
+    {
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">@course.Title</h5>
+                <p>@course.Description</p>
+                <p>Giá: @course.Price</p>
+                <p>
+                    @if (course.Status == CourseStatus.PendingApproval)
+                    {
+                        <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                    }
+                    else if (course.Status == CourseStatus.Approved)
+                    {
+                        <span class="badge bg-success">Đã duyệt</span>
+                    }
+                    else if (course.Status == CourseStatus.Rejected)
+                    {
+                        <span class="badge bg-danger">Bị từ chối</span>
+                    }
+                </p>
+
+                <div class="d-flex justify-content-between">
+                    @if (User.IsInRole("Admin"))
+                    {
+                        @* Admin có thể duyệt hoặc từ chối khóa học *@
+                        @if (course.Status == CourseStatus.PendingApproval)
+                        {
+                            <a href="@Url.Action("Approve", "Course", new { id = course.CourseId })" class="btn btn-success btn-sm">Duyệt</a>
+                            <a href="@Url.Action("Reject", "Course", new { id = course.CourseId })" class="btn btn-danger btn-sm">Từ chối</a>
+                        }
+                    }
+
+                    @if (User.IsInRole("Teacher"))
+                    {
+                        @* Teacher chỉ có thể chỉnh sửa và xóa khóa học của mình *@
+                        <a href="@Url.Action("Edit", "Course", new { id = course.CourseId })" class="btn btn-warning btn-sm">Sửa</a>
+                        <a href="@Url.Action("Delete", "Course", new { id = course.CourseId })" class="btn btn-danger btn-sm">Xóa</a>
+                        <a href="@Url.Action("Details", "Course", new { id = course.CourseId })" class="btn btn-info btn-sm">Xem</a>
+                    }
+
+                    @if (User.IsInRole("Student"))
+                    {
+                        @* Student chỉ có thể xem khóa học đã duyệt *@
+                        <a href="@Url.Action("Details", "Course", new { id = course.CourseId })" class="btn btn-info btn-sm">Xem</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>Không có khóa học nào để hiển thị.</p>
+}

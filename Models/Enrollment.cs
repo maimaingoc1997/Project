@@ -14,4 +14,5 @@ public class Enrollment
 
     public DateTime EnrollmentDate { get; set; }
     public LearningStatus Status { get; set; }
+    public EnollingStatus EnollingStatus { get; set; } 
 }

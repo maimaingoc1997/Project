@@ -20,21 +20,6 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
-// Cấu hình Authentication và Authorization
-// builder.Services.AddAuthentication()
-//     .AddCookie(options =>
-//     {
-//         options.LoginPath = "/Account/Login";
-//         options.AccessDeniedPath = "/Account/AccessDenied";
-//         options.LogoutPath = "/Account/Logout";
-//     });
-// builder.Services.AddDistributedMemoryCache();  // Dịch vụ lưu trữ bộ nhớ cho Session
-// builder.Services.AddSession(options =>
-// {
-//     options.IdleTimeout = TimeSpan.FromMinutes(30);  // Thời gian hết hạn session
-//     options.Cookie.HttpOnly = true;  // Chỉ truy cập qua HTTP, không thể truy cập qua JavaScript
-//     options.Cookie.IsEssential = true;  // Cần thiết cho cookie trong ứng dụng của bạn
-// });
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
@@ -46,6 +31,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 // Cấu hình Session nếu bạn sử dụng session
 builder.Services.AddDistributedMemoryCache();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(1);  // Thời gian hết hạn của session
@@ -60,16 +47,15 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin"));
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -79,6 +65,15 @@ using (var scope = app.Services.CreateScope())
     // Gọi phương thức Initialize để tạo các role và người dùng Admin nếu chưa có
     await SeedRoles.Initialize(services, userManager, roleManager);
 }
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    // Thêm dữ liệu người dùng và khóa học
+    ApplicationDbContext.SeedData(dbContext, userManager);
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseSession(); 

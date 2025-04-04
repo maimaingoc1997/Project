@@ -34,35 +34,57 @@
   </section>
 
   <!-- Course Cards -->
-  <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-6">
-    <!-- Card 1 -->
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-blue-800 text-lg font-bold mb-2">C# for Beginners</h2>
-      <p class="text-sm text-gray-600">C# cho người mới bắt đầu</p>
-      <p class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐ 4.9</p>
-      <p class="text-red-600 font-bold mt-2">499,000 đ <span class="line-through text-gray-400 text-sm">720,000 đ</span></p>
-    </div>
-    <!-- Card 2 -->
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-blue-800 text-lg font-bold mb-2">Object Oriented Programming</h2>
-      <p class="text-sm text-gray-600">Lập trình hướng đối tượng trong C++</p>
-      <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.4</p>
-      <p class="text-green-600 font-bold mt-2">Miễn phí</p>
-    </div>
-    <!-- Card 3 -->
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-blue-800 text-lg font-bold mb-2">Standard Template Library</h2>
-      <p class="text-sm text-gray-600">Thư viện chuẩn C++</p>
-      <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.3</p>
-      <p class="text-green-600 font-bold mt-2">Miễn phí</p>
-    </div>
-    <!-- Card 4 -->
-    <div class="bg-white rounded-lg shadow-md p-4">
-      <h2 class="text-orange-600 text-lg font-bold mb-2">Java Basic</h2>
-      <p class="text-sm text-gray-600">Java cơ bản</p>
-      <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.6</p>
-      <p class="text-green-600 font-bold mt-2">Miễn phí</p>
-    </div>
-  </section>
+<section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-6">
+  <!-- Card 1 -->
+  <div class="bg-white rounded-lg shadow-md p-4">
+    <h2 class="text-blue-800 text-lg font-bold mb-2">C# for Beginners</h2>
+    <p class="text-sm text-gray-600">C# cho người mới bắt đầu</p>
+    <p class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐ 4.9</p>
+    <p class="text-red-600 font-bold mt-2">499,000 đ <span class="line-through text-gray-400 text-sm">720,000 đ</span></p>
+  </div>
+  <!-- Card 2 -->
+  <div class="bg-white rounded-lg shadow-md p-4">
+    <h2 class="text-blue-800 text-lg font-bold mb-2">Object Oriented Programming</h2>
+    <p class="text-sm text-gray-600">Lập trình hướng đối tượng trong C++</p>
+    <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.4</p>
+    <p class="text-green-600 font-bold mt-2">Miễn phí</p>
+  </div>
+  <!-- Card 3 -->
+  <div class="bg-white rounded-lg shadow-md p-4">
+    <h2 class="text-blue-800 text-lg font-bold mb-2">Standard Template Library</h2>
+    <p class="text-sm text-gray-600">Thư viện chuẩn C++</p>
+    <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.3</p>
+    <p class="text-green-600 font-bold mt-2">Miễn phí</p>
+  </div>
+  <!-- Card 4 -->
+  <div class="bg-white rounded-lg shadow-md p-4">
+    <h2 class="text-orange-600 text-lg font-bold mb-2">Java Basic</h2>
+    <p class="text-sm text-gray-600">Java cơ bản</p>
+    <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.6</p>
+    <p class="text-green-600 font-bold mt-2">Miễn phí</p>
+  </div>
+</section>
+<h3>Danh sách khóa học đang bán</h3>
+
+@* Nếu là Student *@
+@if (User.IsInRole("Student"))
+{
+    <h4>Khóa học của bạn</h4>
+  <a href="@Url.Action("Index", "Course")" class="btn btn-primary">Xem các khóa học của bạn</a>
+}
+
+@* Nếu là Teacher *@
+@if (User.IsInRole("Teacher"))
+{
+    <h4>Quản lý khóa học của bạn</h4>
+  <a href="@Url.Action("Index", "Course")" class="btn btn-primary">Xem các khóa học của bạn</a>
+}
+
+@* Nếu là Admin *@
+@if (User.IsInRole("Admin"))
+{
+    <h4>Khóa học cần duyệt</h4>
+  <a href="@Url.Action("Index", "Course")" class="btn btn-primary">Xem các khóa học của bạn</a>
+}
 </body>
 </html>
