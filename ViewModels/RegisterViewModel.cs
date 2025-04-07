@@ -24,7 +24,5 @@ public class RegisterViewModel
     
     [Required(ErrorMessage = "Vui lòng chọn vai trò.")]
     public string Role { get; set; }
-
-    // Để sử dụng dropdown trong view
-    
+   
 }

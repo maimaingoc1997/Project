@@ -16,7 +16,7 @@ public interface ICourseService
     Task RejectCourseAsync(int courseId);
     Task CreateCourseAsync(Course course, string teacherId);
    
-    Task<IEnumerable<Course>> GetCoursesByTeacherAsync(string teacherId); // Lấy khóa học của giảng viên
-    Task<IEnumerable<Course>> GetApprovedCoursesAsync();        // Lấy khóa học đã duyệt
+    Task<IEnumerable<Course>> GetCoursesByTeacherAsync(string teacherId); 
+    Task<IEnumerable<Course>> GetApprovedCoursesAsync();        
     Task<List<Course>> GetApprovedCourses();
 }

@@ -6,7 +6,7 @@ public class LoginViewModel
 {
     [Required]
     [EmailAddress]
-    public string Email { get; set; }  // Không sử dụng dynamic ở đây
+    public string Email { get; set; }  
 
     [Required]
     [DataType(DataType.Password)]

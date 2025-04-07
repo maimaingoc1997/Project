@@ -67,13 +67,7 @@ using (var scope = app.Services.CreateScope())
     await SeedRoles.Initialize(services, userManager, roleManager);
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    // Thêm dữ liệu người dùng và khóa học
-    ApplicationDbContext.SeedData(dbContext, userManager);
-}
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

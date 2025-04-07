@@ -15,10 +15,8 @@ public class CourseService : ICourseService
         _context = context;
     }
 
-    // Lấy danh sách khóa học của student
     public List<Course> GetStudentCourses(string studentId)
     {
-        // Truy vấn danh sách các khóa học mà sinh viên đã đăng ký
         var courses = _context.Enrollments
             .Where(e => e.StudentId == studentId && e.Status != LearningStatus.NotStarted)
             .Select(e => e.Course)
@@ -27,7 +25,6 @@ public class CourseService : ICourseService
         return courses;
     }
 
-    // Các phương thức khác
     public List<Course> GetTeacherCourses(string username)
     {
         return _context.Courses
@@ -55,14 +52,12 @@ public class CourseService : ICourseService
 
     public async Task CreateCourseAsync(Course course, string teacherId)
     {
-        // Set thông tin giảng viên và trạng thái khóa học
+ 
         course.TeacherId = teacherId;
         course.Status = CourseStatus.PendingApproval;
 
-        // Thêm khóa học vào cơ sở dữ liệu
         await _context.Courses.AddAsync(course);
-        
-        // Lưu thay đổi vào cơ sở dữ liệu (bất đồng bộ)
+
         await _context.SaveChangesAsync();
     }
 
@@ -73,18 +68,15 @@ public class CourseService : ICourseService
 
         if (existingCourse != null)
         {
-            // Cập nhật các thuộc tính của khóa học
             existingCourse.Title = course.Title;
             existingCourse.Description = course.Description;
             existingCourse.Price = course.Price;
             existingCourse.PreviewVideoUrl = course.PreviewVideoUrl;
 
-            // Lưu thay đổi vào cơ sở dữ liệu
             await _context.SaveChangesAsync();
         }
         else
         {
-            // Nếu không tìm thấy khóa học, có thể ném ra ngoại lệ hoặc làm gì đó tùy ý
             throw new InvalidOperationException("Course not found.");
         }
     }
