@@ -18,5 +18,5 @@ public interface ICourseService
    
     Task<IEnumerable<Course>> GetCoursesByTeacherAsync(string teacherId); // Lấy khóa học của giảng viên
     Task<IEnumerable<Course>> GetApprovedCoursesAsync();        // Lấy khóa học đã duyệt
-      
+    Task<List<Course>> GetApprovedCourses();
 }

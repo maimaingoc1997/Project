@@ -1,55 +1,67 @@
-@model CourseShopOnline.ViewModels.LoginViewModel  
+@model CourseShopOnline.ViewModels.LoginViewModel
 
 @{
     ViewData["Title"] = "Đăng nhập";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid text-light py-5" style="min-height: 80vh ;background-color: #495057;">
+<div class="container-fluid text-light py-5" style="min-height: 80vh; background-color: #1f2d3d;">
     <div class="row justify-content-center align-items-center">
+        <!-- Intro bên trái -->
         <div class="col-lg-5 text-start ps-5">
-            <h2 class="fw-bold">Nền tảng học lập trình trực tuyến dành riêng <br /> <span class="text-info">cho học sinh</span></h2>
+            <h2 class="fw-bold text-warning">Học lập trình trực tuyến <br /><span class="text-info">cho học sinh</span></h2>
             <ul class="mt-4 list-unstyled fs-5">
-                <li><i class="bi bi-plus-circle me-2"></i>Học lập trình từ 0</li>
-                <li><i class="bi bi-plus-circle me-2"></i>Khơi dậy đam mê công nghệ</li>
-                <li><i class="bi bi-plus-circle me-2"></i>Chinh phục thế giới số, khẳng định bản thân</li>
-                <li><i class="bi bi-plus-circle me-2"></i>Mở ra cơ hội việc làm hấp dẫn trong tương lai</li>
+                <li><i class="bi bi-code-slash me-2"></i>Học từ cơ bản tới nâng cao</li>
+                <li><i class="bi bi-lightning me-2"></i>Khơi dậy đam mê công nghệ</li>
+                <li><i class="bi bi-award me-2"></i>Chinh phục thế giới số</li>
+                <li><i class="bi bi-briefcase me-2"></i>Cơ hội nghề nghiệp hấp dẫn</li>
             </ul>
-            <div class="mt-4">
-                <img src="~/images/fpt_polytechnic.png" alt="FPT" class="me-3" style="height: 40px;" />
+            <div class="mt-4 d-flex gap-3">
+                <img src="~/images/fpt_polytechnic.png" alt="FPT" style="height: 40px;" />
                 <img src="~/images/funix.png" alt="FUNiX" style="height: 40px;" />
             </div>
         </div>
 
-        <div class="col-lg-4 bg-white text-dark rounded shadow p-4">
-            <h4 class="mb-4 text-center">Học lập trình cùng với hàng triệu người với CodeLearn</h4>
+        <!-- Form đăng nhập bên phải -->
+        <div class="col-lg-4 bg-white text-dark rounded-4 shadow-lg p-5">
+            <h4 class="mb-4 text-center text-primary">🔐 Đăng nhập vào CodeLearn</h4>
+
             <form asp-action="Login" method="post">
                 @Html.AntiForgeryToken()
+
                 <div class="form-group mb-3">
-                    <label for="email">Tài khoản</label>
-                    <input asp-for="Email" class="form-control" placeholder="Tên tài khoản" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+                    <label for="email" class="form-label">Tài khoản</label>
+                    <input asp-for="Email" class="form-control rounded-3" placeholder="Tên tài khoản" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
                 </div>
+
                 <div class="form-group mb-3">
-                    <label for="password">Mật khẩu</label>
-                    <input asp-for="Password" class="form-control" type="password" placeholder="Mật khẩu" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
+                    <label for="password" class="form-label">Mật khẩu</label>
+                    <input asp-for="Password" type="password" class="form-control rounded-3" placeholder="Mật khẩu" />
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
+
                 <div class="mb-3 text-end">
-                    <a href="#">Quên mật khẩu?</a>
+                    <a href="#" class="text-decoration-none small">Quên mật khẩu?</a>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+
+                <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-bold">
+                    Đăng nhập
+                </button>
             </form>
 
-            <hr />
-            <div class="text-center">Hoặc tiếp tục với</div>
+            <hr class="my-4" />
+            <div class="text-center text-muted">Hoặc tiếp tục với</div>
+
             <div class="d-flex justify-content-center gap-3 mt-3">
-                <button class="btn btn-light border"><i class="bi bi-windows"></i></button>
-                <button class="btn btn-light border"><i class="bi bi-google"></i></button>
-                <button class="btn btn-light border"><i class="bi bi-github"></i></button>
+                <button class="btn btn-outline-dark rounded-circle px-3 py-2"><i class="bi bi-windows"></i></button>
+                <button class="btn btn-outline-danger rounded-circle px-3 py-2"><i class="bi bi-google"></i></button>
+                <button class="btn btn-outline-secondary rounded-circle px-3 py-2"><i class="bi bi-github"></i></button>
             </div>
-            <p class="mt-3 text-center">
-                Nếu bạn chưa có tài khoản, vui lòng <a href="/Account/Register">Đăng ký</a>
+
+            <p class="mt-4 text-center">
+                <span class="text-muted">Chưa có tài khoản?</span> 
+                <a href="/Account/Register" class="fw-semibold text-decoration-none">Đăng ký ngay</a>
             </p>
         </div>
     </div>

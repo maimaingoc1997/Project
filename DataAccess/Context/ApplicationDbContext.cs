@@ -19,8 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
     public DbSet<Enrollment> Enrollments { get; set; }
     public DbSet<Review> Reviews { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
-    public DbSet<Transaction> Transactions { get; set; }
-    public DbSet<TransactionDetail> TransactionDetails { get; set; }
+  
     public static async Task SeedData(ApplicationDbContext context, UserManager<User> userManager)
     {
         if (!context.Users.Any())
@@ -37,7 +36,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
 
             if (result.Succeeded)
             {
-                await userManager.AddToRoleAsync(teacher, "Teacher");  // Gán vai trò Teacher
+                await userManager.AddToRoleAsync(teacher, "Teacher");  
             }
             else
             {
@@ -119,22 +118,7 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .WithMany()
             .HasForeignKey(ci => ci.CourseId);
 
-        // Transaction - User
-        modelBuilder.Entity<Transaction>()
-            .HasOne(t => t.Student)
-            .WithMany()
-            .HasForeignKey(t => t.StudentId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        // TransactionDetail
-        modelBuilder.Entity<TransactionDetail>()
-            .HasOne(td => td.Transaction)
-            .WithMany(t => t.Details)
-            .HasForeignKey(td => td.TransactionId);
-
-        modelBuilder.Entity<TransactionDetail>()
-            .HasOne(td => td.Course)
-            .WithMany()
-            .HasForeignKey(td => td.CourseId);
+       
+      
     }
 }

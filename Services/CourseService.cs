@@ -133,4 +133,10 @@ public class CourseService : ICourseService
             .Include(c => c.Teacher)
             .ToListAsync();
     }
+    public async Task<List<Course>> GetApprovedCourses()
+    {
+        return await _context.Courses
+            .Where(c => c.Status == CourseStatus.Approved)
+            .ToListAsync();
+    }
 }

@@ -3,73 +3,91 @@
     ViewData["Title"] = "Đăng kí";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container-fluid text-light py-5" style="min-height: 80vh; background-color: #495057;">
+
+<div class="container-fluid text-light py-5" style="min-height: 80vh; background-color: #1f2d3d;">
     <div class="row justify-content-center align-items-center">
+        <!-- Intro bên trái -->
         <div class="col-lg-5 text-start ps-5">
-            <h2 class="fw-bold">Nền tảng học lập trình trực tuyến dành riêng <br /> <span class="text-info">cho học sinh</span></h2>
+            <h2 class="fw-bold text-warning">Học lập trình trực tuyến <br /><span class="text-info">cho học sinh</span></h2>
             <ul class="mt-4 list-unstyled fs-5">
-                <li><i class="bi bi-plus-circle me-2"></i>Học lập trình từ 0</li>
-                <li><i class="bi bi-plus-circle me-2"></i>Khơi dậy đam mê công nghệ</li>
-                <li><i class="bi bi-plus-circle me-2"></i>Chinh phục thế giới số, khẳng định bản thân</li>
-                <li><i class="bi bi-plus-circle me-2"></i>Mở ra cơ hội việc làm hấp dẫn trong tương lai</li>
+                <li><i class="bi bi-code-slash me-2"></i>Học từ cơ bản tới nâng cao</li>
+                <li><i class="bi bi-lightning me-2"></i>Khơi dậy đam mê công nghệ</li>
+                <li><i class="bi bi-award me-2"></i>Chinh phục thế giới số</li>
+                <li><i class="bi bi-briefcase me-2"></i>Cơ hội nghề nghiệp hấp dẫn</li>
             </ul>
-            <div class="mt-4">
-                <img src="~/images/fpt_polytechnic.png" alt="FPT" class="me-3" style="height: 40px;" />
+            <div class="mt-4 d-flex gap-3">
+                <img src="~/images/fpt_polytechnic.png" alt="FPT" style="height: 40px;" />
                 <img src="~/images/funix.png" alt="FUNiX" style="height: 40px;" />
             </div>
         </div>
 
-        <div class="col-lg-4 bg-white text-dark rounded shadow p-4">
-            <h4 class="mb-4 text-center">Đăng ký tài khoản CodeLearn</h4>
-            <form asp-action="Register" method="post">
+        <!-- Form đăng ký bên phải -->
+        <div class="col-lg-4 bg-white text-dark rounded-4 shadow-lg p-5">
+            <h4 class="mb-4 text-center text-primary">Đăng ký tài khoản CodeLearn</h4>
+            <form asp-action="Register" method="post" class="needs-validation" novalidate>
                 @Html.AntiForgeryToken()
-               <div class="form-group mb-3">
-                   <label for="Role">Chọn vai trò</label>
-                   <select asp-for="Role" class="form-control">
-                      
-                           <option value="Student">Student</option>
-                           <option value="Teacher">Teacher</option>
-                       
-                   </select>
-                   <span asp-validation-for="Role" class="text-danger"></span>
-               </div>
+
+                <!-- Chọn vai trò -->
                 <div class="form-group mb-3">
-                    <label for="FullName">Họ và tên</label>
-                    <input asp-for="FullName" class="form-control" placeholder="Tên đầy đủ" />
+                    <label for="Role" class="form-label">Chọn vai trò</label>
+                    <select asp-for="Role" class="form-control form-control-sm" required>
+                        <option value="Student">Student</option>
+                        <option value="Teacher">Teacher</option>
+                    </select>
+                    <div class="invalid-feedback">Vui lòng chọn vai trò của bạn.</div>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+
+                <!-- Họ và tên -->
+                <div class="form-group mb-3">
+                    <label for="FullName" class="form-label">Họ và tên</label>
+                    <input asp-for="FullName" class="form-control form-control-sm" placeholder="Tên đầy đủ" required />
+                    <div class="invalid-feedback">Vui lòng nhập tên đầy đủ của bạn.</div>
                     <span asp-validation-for="FullName" class="text-danger"></span>
                 </div>
-                
+
+                <!-- Email -->
                 <div class="form-group mb-3">
-                    <label for="Email">Tài khoản (Email)</label>
-                    <input asp-for="Email" class="form-control" placeholder="Email của bạn" />
+                    <label for="Email" class="form-label">Tài khoản (Email)</label>
+                    <input asp-for="Email" class="form-control form-control-sm" placeholder="Email của bạn" required />
+                    <div class="invalid-feedback">Vui lòng nhập địa chỉ email hợp lệ.</div>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
 
+                <!-- Mật khẩu -->
                 <div class="form-group mb-3">
-                    <label for="Password">Mật khẩu</label>
-                    <input asp-for="Password" class="form-control" type="password" placeholder="Mật khẩu" />
+                    <label for="Password" class="form-label">Mật khẩu</label>
+                    <input asp-for="Password" class="form-control form-control-sm" type="password" placeholder="Mật khẩu" required />
+                    <div class="invalid-feedback">Vui lòng nhập mật khẩu của bạn.</div>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
 
+                <!-- Xác nhận mật khẩu -->
                 <div class="form-group mb-3">
-                    <label for="ConfirmPassword">Xác nhận mật khẩu</label>
-                    <input asp-for="ConfirmPassword" class="form-control" type="password" placeholder="Xác nhận mật khẩu" />
+                    <label for="ConfirmPassword" class="form-label">Xác nhận mật khẩu</label>
+                    <input asp-for="ConfirmPassword" class="form-control form-control-sm" type="password" placeholder="Xác nhận mật khẩu" required />
+                    <div class="invalid-feedback">Vui lòng xác nhận mật khẩu của bạn.</div>
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
+
                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+                <!-- Nút đăng ký -->
+                <button type="submit" class="btn btn-primary w-100 py-2 fs-5 rounded-lg">Đăng ký</button>
             </form>
 
             <hr />
             <div class="text-center">Hoặc tiếp tục với</div>
+
+            <!-- Các nút login social -->
             <div class="d-flex justify-content-center gap-3 mt-3">
-                <button class="btn btn-light border"><i class="bi bi-windows"></i></button>
-                <button class="btn btn-light border"><i class="bi bi-google"></i></button>
-                <button class="btn btn-light border"><i class="bi bi-github"></i></button>
+                <button class="btn btn-outline-dark rounded-circle px-3 py-2 transition hover:bg-blue-100"><i class="bi bi-windows"></i></button>
+                <button class="btn btn-outline-danger rounded-circle px-3 py-2 transition hover:bg-blue-100"><i class="bi bi-google"></i></button>
+                <button class="btn btn-outline-secondary rounded-circle px-3 py-2 transition hover:bg-blue-100"><i class="bi bi-github"></i></button>
             </div>
+
             <p class="mt-3 text-center">
-                Nếu bạn đã có tài khoản, vui lòng <a href="/Account/Login">Đăng nhập</a>
+                <span class="text-muted">Nếu bạn đã có tài khoản, vui lòng <a href="/Account/Login" class="fw-semibold text-decoration-none">Đăng nhập</a></span>
             </p>
         </div>
     </div>

@@ -1,0 +1,41 @@
+@model CourseShopOnline.ViewModels.EditProfileViewModel
+
+@{
+    ViewData["Title"] = "Chỉnh sửa thông tin cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5" style="max-width: 600px;">
+    <!-- Thông báo thành công -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow rounded-4">
+        <div class="card-body p-5">
+            <h3 class="text-center mb-4 text-primary">👤 Cập nhật thông tin cá nhân</h3>
+
+            <form asp-action="EditProfile" method="post">
+                <div class="mb-3">
+                    <label asp-for="FullName" class="form-label">Họ và tên</label>
+                    <input asp-for="FullName" class="form-control rounded-3" placeholder="Nhập họ tên đầy đủ" />
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label">Email</label>
+                    <input asp-for="Email" class="form-control rounded-3" placeholder="Nhập địa chỉ email" />
+                    <span asp-validation-for="Email" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success w-100 py-2 rounded-3 fw-bold">
+                    💾 Lưu thay đổi
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

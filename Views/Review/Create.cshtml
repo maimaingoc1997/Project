@@ -1,0 +1,38 @@
+@model CourseShopOnline.ViewModels.ReviewViewModel
+
+@{
+    ViewData["Title"] = "Gửi đánh giá khóa học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5" style="max-width: 700px;">
+    <h2 class="text-center text-primary mb-4">✍️ Gửi đánh giá khóa học</h2>
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+    <div class="card shadow rounded-4">
+        <div class="card-body p-5">
+            <form asp-action="Create" method="post">
+                @Html.HiddenFor(model => model.CourseId)
+
+                <div class="mb-4">
+                    <label asp-for="Rating" class="form-label fw-semibold">Đánh giá (1 - 5 sao):</label>
+                    <input asp-for="Rating" type="number" min="1" max="5" required class="form-control rounded-3" placeholder="Nhập số sao (1 đến 5)" />
+                    <span asp-validation-for="Rating" class="text-danger small"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Comment" class="form-label fw-semibold">Nhận xét của bạn:</label>
+                    <textarea asp-for="Comment" rows="5" class="form-control rounded-3" placeholder="Hãy chia sẻ trải nghiệm của bạn..." required></textarea>
+                    <span asp-validation-for="Comment" class="text-danger small"></span>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success px-4 py-2 fw-bold rounded-3">
+                        🚀 Gửi đánh giá
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

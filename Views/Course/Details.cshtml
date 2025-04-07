@@ -1,103 +1,179 @@
 @using CourseShopOnline.Models.Enum
 @model Course
 
-<h2 class="text-center mb-4">@Model.Title</h2>
+@{
 
-<div class="card mb-4">
-    <div class="card-body">
-        <h5 class="card-title">Mô tả khóa học</h5>
-        <p>@Model.Description</p>
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
-        <h6>Giá: @Model.Price</h6>
-
-        <p>
-            @if (Model.Status == CourseStatus.PendingApproval)
-            {
-                <span class="badge bg-warning text-dark">Chờ duyệt</span>
-            }
-            else if (Model.Status == CourseStatus.Approved)
-            {
-                <span class="badge bg-success">Đã duyệt</span>
-            }
-            else if (Model.Status == CourseStatus.Rejected)
-            {
-                <span class="badge bg-danger">Bị từ chối</span>
-            }
-        </p>
-        <h6>Số lượng học sinh đã đăng ký: @ViewData["ApprovedEnrollmentsCount"]</h6>
-        <!-- Kiểm tra nếu học sinh -->
-        @if (User.IsInRole("Student"))
-        {
-            var enrollment = ViewData["Enrollment"] as Enrollment;
-
-            if (enrollment == null || enrollment.EnollingStatus == EnollingStatus.NotEnrolled)
-            {
-                <!-- Nếu học sinh chưa đăng ký khóa học -->
-                @if (Model.Status == CourseStatus.Approved)
-                {
-                    <form method="post" action="@Url.Action("Enroll", "Course", new { id = Model.CourseId })">
-                        <button type="submit" class="btn btn-primary">Đăng ký khóa học</button>
-                    </form>
-                }
-                else
-                {
-                    <p class="text-muted">Bạn không thể đăng ký khóa học khi khóa học chưa được duyệt.</p>
-                }
-            }
-            else if (enrollment.EnollingStatus == EnollingStatus.Pending)
-            {
-                <!-- Nếu học sinh đã đăng ký và đang chờ giảng viên duyệt -->
-                <p class="text-muted">Bạn đã đăng ký khóa học này và đang chờ giảng viên duyệt.</p>
-            }
-            else if (enrollment.EnollingStatus == EnollingStatus.Approved)
-            {
-                <!-- Nếu học sinh đã được duyệt đăng ký, hiển thị video -->
-                <h6 class="mt-4">Video giới thiệu khóa học</h6>
-                <video width="100%" controls>
-                    <source src="@Model.PreviewVideoUrl" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            }
-            else
-            {
-                <p class="text-muted">Trạng thái của bạn không cho phép xem video.</p>
-            }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <title>@Model.Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        <!-- Kiểm tra nếu giảng viên -->
-        @if (User.IsInRole("Teacher"))
-        {
-            <h5 class="mt-4">Danh sách học sinh đăng ký</h5>
-
-            <h6>Học sinh đang chờ duyệt</h6>
-            <ul>
-                @foreach (var enrollment in ViewData["Enrollments"] as IEnumerable<Enrollment>)
-                {
-                    @if (enrollment.EnollingStatus == EnollingStatus.Pending)
-                    {
-                        <li>@enrollment.Student.UserName - <span class="badge bg-warning text-dark">Chờ duyệt</span></li>
-                        <!-- Nút duyệt đăng ký -->
-                        <form method="post" action="@Url.Action("ApproveEnrollment", "Course", new { enrollmentId = enrollment.EnrollmentId })">
-                            <button type="submit" class="btn btn-success btn-sm">Duyệt</button>
-                        </form>
-                    }
-                }
-            </ul>
-
-            <h6>Học sinh đã đăng ký</h6>
-            <ul>
-                @foreach (var enrollment in ViewData["Enrollments"] as IEnumerable<Enrollment>)
-                {
-                    @if (enrollment.EnollingStatus == EnollingStatus.Approved)
-                    {
-                        <li>@enrollment.Student.UserName - <span class="badge bg-success">Đã duyệt</span></li>
-                    }
-                }
-            </ul>
+        .course-container {
+            max-width: 900px;
+            margin: 40px auto;
         }
 
-        <div class="d-flex justify-content-between mt-4">
-            <a href="@Url.Action("Index", "Course")" class="btn btn-secondary">Quay lại danh sách khóa học</a>
+        .card {
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .badge {
+            font-size: 0.9rem;
+        }
+
+        video {
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-weight: bold;
+        }
+
+        .btn-sm {
+            border-radius: 20px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-top: 30px;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container course-container">
+        <h2 class="text-center mb-4">@Model.Title</h2>
+
+        <div class="card p-4">
+            <div class="card-body">
+                <div class="course-image-container mb-3 d-flex justify-content-center">
+                    <img src="@Model.ImageUrl" class="img-fluid rounded-3" style="max-width:auto; height: 250px" alt="Course Image" />
+                </div>
+                <h5 class="section-title">📖 Mô tả khóa học</h5>
+                <p>@Model.Description</p>
+
+                <h6 class="section-title">💵 Giá: <span class="text-success fw-bold">@Model.Price.ToString("N0") VNĐ</span></h6>
+
+                <p>
+                    @if (Model.Status == CourseStatus.PendingApproval)
+                    {
+                        <span class="badge bg-warning text-dark">⏳ Chờ duyệt</span>
+                    }
+                    else if (Model.Status == CourseStatus.Approved)
+                    {
+                        <span class="badge bg-success">✅ Đã duyệt</span>
+                    }
+                    else if (Model.Status == CourseStatus.Rejected)
+                    {
+                        <span class="badge bg-danger">❌ Bị từ chối</span>
+                    }
+                </p>
+
+                <h6 class="section-title">👥 Số học sinh đã đăng ký: @ViewData["ApprovedEnrollmentsCount"]</h6>
+
+                @if (User.IsInRole("Student"))
+                {
+                    var enrollment = ViewData["Enrollment"] as Enrollment;
+
+                    if (enrollment == null || enrollment.EnollingStatus == EnollingStatus.NotEnrolled)
+                    {
+                        if (Model.Status == CourseStatus.Approved)
+                        {
+                            <form method="post" action="@Url.Action("Enroll", "Course", new { id = Model.CourseId })">
+                                <button type="submit" class="btn btn-primary mt-2">Đăng ký khóa học</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <p class="text-muted mt-2">Bạn không thể đăng ký khóa học khi chưa được duyệt.</p>
+                        }
+                    }
+                    else if (enrollment.EnollingStatus == EnollingStatus.Pending)
+                    {
+                        <p class="text-warning mt-2">🕒 Bạn đã đăng ký và đang chờ giảng viên duyệt.</p>
+                    }
+                    else if (enrollment.EnollingStatus == EnollingStatus.Approved)
+                    {
+                        <h6 class="section-title">🎬 Video giới thiệu khóa học</h6>
+                        <video width="100%" controls>
+                            <source src="@Model.PreviewVideoUrl" type="video/mp4">
+                            Trình duyệt của bạn không hỗ trợ video.
+                        </video>
+                        <a href="@Url.Action("Create", "Review", new { courseId = Model.CourseId })" class="btn btn-info btn-sm mt-3">
+                            Thêm đánh giá
+                        </a>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Trạng thái đăng ký không hợp lệ.</p>
+                    }
+                }
+
+                @if (User.IsInRole("Teacher"))
+                {
+                    <h5 class="section-title">📋 Danh sách học sinh đăng ký</h5>
+
+                    <h6 class="mb-2">🟡 Học sinh đang chờ duyệt:</h6>
+                    <ul>
+                        @foreach (var enrollment in ViewData["Enrollments"] as IEnumerable<Enrollment>)
+                        {
+                            if (enrollment.EnollingStatus == EnollingStatus.Pending)
+                            {
+                                <li>
+                                    <strong>@enrollment.Student.UserName</strong> - <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                                    <form method="post" class="d-inline" action="@Url.Action("ApproveEnrollment", "Course", new { enrollmentId = enrollment.EnrollmentId })">
+                                        <button type="submit" class="btn btn-success btn-sm ms-2">Duyệt</button>
+                                    </form>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <h6 class="mt-4 mb-2">🟢 Học sinh đã được duyệt:</h6>
+                    <ul>
+                        @foreach (var enrollment in ViewData["Enrollments"] as IEnumerable<Enrollment>)
+                        {
+                            if (enrollment.EnollingStatus == EnollingStatus.Approved)
+                            {
+                                <li>
+                                    <strong>@enrollment.Student.UserName</strong> - <span class="badge bg-success">Đã duyệt</span>
+                                </li>
+                            }
+                        }
+                    </ul>
+                }
+
+                <div class="mt-4">
+                    <a href="@Url.Action("CourseReviews", "Review", new { courseId = Model.CourseId })" class="btn btn-outline-info btn-sm">
+                        📊 Xem đánh giá khóa học
+                    </a>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <a href="@Url.Action("Index", "Course")" class="btn btn-secondary">⬅ Quay lại danh sách</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</body>
+</html>

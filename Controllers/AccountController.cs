@@ -17,19 +17,19 @@ public class AccountController : Controller
     private readonly SignInManager<User> _signInManager;
     private readonly IPasswordHasher<User> _passwordHasher;
 
-    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IPasswordHasher<User> passwordHasher)
+    public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
+        IPasswordHasher<User> passwordHasher)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _passwordHasher = passwordHasher;
     }
-    // GET: /Account/Login
+
     public IActionResult Login()
     {
         return View();
     }
 
-    // POST: /Account/Login
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
@@ -42,10 +42,12 @@ public class AccountController : Controller
                 ModelState.AddModelError(string.Empty, "Tài khoản không tồn tại.");
                 return View(model);
             }
+
             var passwordHasher = new PasswordHasher<User>();
             var hashedPassword = passwordHasher.HashPassword(user, model.Password);
-            
-            var passwordValid = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password) == PasswordVerificationResult.Success;
+
+            var passwordValid = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.Password) ==
+                                PasswordVerificationResult.Success;
 
             if (passwordValid)
             {
@@ -61,15 +63,12 @@ public class AccountController : Controller
 
         return View(model);
     }
-    
-    // GET: /Account/Register
+
     public IActionResult Register()
     {
-        
         return View();
     }
 
-    // POST: /Account/Register
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
@@ -78,6 +77,7 @@ public class AccountController : Controller
         {
             ModelState.AddModelError("Role", "Vui lòng chọn vai trò.");
         }
+
         if (ModelState.ContainsKey("Role"))
         {
             var roleErrors = ModelState["Role"].Errors;
@@ -86,16 +86,18 @@ public class AccountController : Controller
                 Console.WriteLine(error.ErrorMessage);
             }
         }
+
         if (!ModelState.IsValid)
         {
             foreach (var modelError in ModelState.Values)
             {
                 foreach (var error in modelError.Errors)
                 {
-                    Console.WriteLine(error.ErrorMessage);  // Log lỗi ra console
+                    Console.WriteLine(error.ErrorMessage); // Log lỗi ra console
                 }
             }
         }
+
         if (ModelState.IsValid)
         {
             var existingUser = await _userManager.FindByNameAsync(model.Email);
@@ -120,7 +122,6 @@ public class AccountController : Controller
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    // Gán role cho người dùng là Student hoặc Teacher
                     await _userManager.AddToRoleAsync(user, model.Role);
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -139,15 +140,131 @@ public class AccountController : Controller
                 ModelState.AddModelError(string.Empty, "Có lỗi xảy ra khi tạo tài khoản.");
             }
         }
-        
-
-        // Lấy lại danh sách role để hiển thị trong dropdown khi có lỗi
-       
         return View(model);
     }
+
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
+    }
+
+    public async Task<IActionResult> EditProfile()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account"); 
+        }
+
+        var model = new EditProfileViewModel
+        {
+            FullName = user.FullName,
+            Email = user.Email,
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                Console.WriteLine($"Error: {error.ErrorMessage}");
+            }
+
+            return View(model); 
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account");
+        }
+        
+        user.FullName = model.FullName;
+        user.Email = model.Email;
+
+        var updateResult = await _userManager.UpdateAsync(user);
+        if (updateResult.Succeeded)
+        {
+            TempData["SuccessMessage"] = "Thông tin đã được cập nhật thành công!";
+        }
+        else
+        {
+            foreach (var error in updateResult.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+        }
+
+        return View(model);
+    }
+
+
+    public IActionResult ChangePassword()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model); 
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account"); 
+        }
+        if (model.NewPassword != model.ConfirmPassword)
+        {
+            ModelState.AddModelError(string.Empty, "The new password and confirmation password do not match.");
+            return View(model); 
+        }
+        var passwordHasher = new PasswordHasher<User>();
+        var hashedPassword = passwordHasher.HashPassword(user, model.CurrentPassword);
+
+        var passwordVerificationResult =
+            passwordHasher.VerifyHashedPassword(user, user.PasswordHash, model.CurrentPassword) ==
+            PasswordVerificationResult.Success;
+
+        if (!passwordVerificationResult)
+        {
+            ModelState.AddModelError(string.Empty, "The current password is incorrect.");
+            return View(model); 
+        }
+
+
+        var newPasswordHash = _userManager.PasswordHasher.HashPassword(user, model.NewPassword);
+
+
+        user.PasswordHash = newPasswordHash;
+
+        var updateResult = await _userManager.UpdateAsync(user);
+
+        if (updateResult.Succeeded)
+        {
+            TempData["SuccessMessage"] = "Your password has been changed successfully!";
+            return
+                RedirectToAction("ChangePassword", "Account"); 
+        }
+        else
+        {
+            foreach (var error in updateResult.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model); 
+        }
     }
 }

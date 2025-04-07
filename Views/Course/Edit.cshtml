@@ -1,42 +1,96 @@
 @model CourseShopOnline.ViewModels.CourseViewModel
 
 @{
-    ViewBag.Title = "Edit Course";
+    ViewBag.Title = "Chỉnh sửa khóa học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 class="text-center mb-4">Chỉnh sửa khóa học</h2>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <style>
+        body {
+            background-color: #f1f3f5;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-@using (Html.BeginForm("Edit", "Course", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.HiddenFor(model => model.CourseId)
+        .form-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background-color: #ffffff;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
 
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Title, new { @class = "form-label" })
-        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        .form-label {
+            font-weight: 600;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 10px 15px;
+        }
+
+        .btn-lg {
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: 600;
+        }
+
+        .text-danger {
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center mb-4">🛠️ Chỉnh sửa khóa học</h2>
+
+            @using (Html.BeginForm("Edit", "Course", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(model => model.CourseId)
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Title, new { @class = "form-label" })
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Description, new { @class = "form-label" })
+                    @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = "4" })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Price, new { @class = "form-label" })
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-4">
+                    @Html.LabelFor(model => model.PreviewVideoUrl, new { @class = "form-label" })
+                    @Html.EditorFor(model => model.PreviewVideoUrl, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PreviewVideoUrl, "", new { @class = "text-danger" })
+                </div>
+                <div class="mb-4">
+                    @Html.LabelFor(model => model.ImageUrl, new { @class = "form-label" })
+                    @Html.EditorFor(model => model.ImageUrl, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ImageUrl, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary btn-lg">💾 Lưu thay đổi</button>
+                    <a href="@Url.Action("Index", "Course")" class="btn btn-outline-secondary btn-lg">⬅ Quay lại</a>
+                </div>
+            }
+        </div>
     </div>
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Description, new { @class = "form-label" })
-        @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.Price, new { @class = "form-label" })
-        @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="form-group mb-3">
-        @Html.LabelFor(model => model.PreviewVideoUrl, new { @class = "form-label" })
-        @Html.EditorFor(model => model.PreviewVideoUrl, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.PreviewVideoUrl, "", new { @class = "text-danger" })
-    </div>
-
-    <div class="d-flex justify-content-between">
-        <button type="submit" class="btn btn-primary btn-lg">Lưu thay đổi</button>
-        <a href="@Url.Action("Index", "Course")" class="btn btn-secondary btn-lg">Quay lại</a>
-    </div>
-}
+</body>
+</html>

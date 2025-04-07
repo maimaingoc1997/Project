@@ -13,7 +13,7 @@ public class Course
 
     public string TeacherId { get; set; }
     public User Teacher { get; set; }
-
+    public string ImageUrl { get; set; }
     public ICollection<Enrollment> Enrollments { get; set; }
     public ICollection<Review> Reviews { get; set; }
 }

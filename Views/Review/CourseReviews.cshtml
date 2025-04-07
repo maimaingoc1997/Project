@@ -1,0 +1,41 @@
+@model List<Review>
+
+@{
+    ViewData["Title"] = "Đánh giá khóa học";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5" style="max-width: 800px;">
+    <h2 class="mb-4 text-primary fw-bold text-center">📝 Đánh giá khóa học</h2>
+
+    @if (Model.Any())
+    {
+        @foreach (var r in Model)
+        {
+            <div class="bg-white shadow-sm rounded-4 p-4 mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0 text-dark fw-semibold">
+                        <i class="bi bi-person-circle me-2 text-primary"></i>@r.Student.FullName
+                    </h5>
+                    <span class="badge bg-warning text-dark">
+                        <i class="bi bi-star-fill me-1"></i>@r.Rating sao
+                    </span>
+                </div>
+                <p class="text-secondary">@r.Comment</p>
+                <small class="text-muted"><i class="bi bi-clock me-1"></i>@r.ReviewDate.ToString("dd/MM/yyyy")</small>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info text-center">
+            <i class="bi bi-info-circle me-2"></i>Chưa có đánh giá nào cho khóa học này.
+        </div>
+    }
+
+    <div class="mt-4 text-center">
+        <a href="@Url.Action("Index", "Course")" class="btn btn-outline-secondary">
+            ⬅ Quay lại danh sách khóa học
+        </a>
+    </div>
+</div>

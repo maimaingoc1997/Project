@@ -1,90 +1,99 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using CourseShopOnline.Models.Enum
+@model IEnumerable<Course>
+@{
+    ViewData["Title"] = "Trang chủ";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CodeLearn Home</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50 font-sans">
- 
-  <!-- Banner -->
-  <section class="bg-blue-100 mt-4 rounded-xl mx-6 p-6 flex justify-between items-center shadow-sm">
-    <div>
-      <h1 class="text-3xl font-bold text-blue-600 mb-2">ĐƯỜNG ĐUA LẬP TRÌNH</h1>
-      <p class="text-gray-700 mb-2">Dành riêng cho học sinh Tiểu học và THCS</p>
-      <button class="bg-red-500 text-white px-4 py-2 rounded-md">XEM CHI TIẾT</button>
-      <p class="text-xs mt-1 text-gray-500">30/09/2024 - Tháng 04/2025 (Dự kiến)</p>
-    </div>
-    <img src="robot-banner.png" alt="Robot" class="w-40" />
-  </section>
 
-  <!-- Tabs -->
-  <section class="mt-6 mx-6">
-    <div class="flex space-x-6 text-blue-700 font-semibold border-b border-gray-200">
-      <button class="pb-2 border-b-2 border-blue-700">Khóa học gợi ý</button>
-      <button class="pb-2">Đang học (2)</button>
-      <button class="pb-2">Hoàn thành (1)</button>
+<!-- Banner -->
+<section class="bg-blue-100 mt-6 mx-6 p-6 rounded-xl flex flex-col md:flex-row justify-between items-center shadow">
+    <div class="mb-4 md:mb-0">
+        <h1 class="text-3xl font-bold text-blue-600 mb-2">🚀 ĐƯỜNG ĐUA LẬP TRÌNH</h1>
+        <p class="text-gray-700 mb-2">Dành riêng cho học sinh Tiểu học và THCS</p>
+        <button class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-md transition">XEM CHI TIẾT</button>
+        <p class="text-xs mt-1 text-gray-500">30/09/2024 - Tháng 04/2025 (Dự kiến)</p>
     </div>
-  </section>
-
-  <!-- Course Cards -->
-<section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-6">
-  <!-- Card 1 -->
-  <div class="bg-white rounded-lg shadow-md p-4">
-    <h2 class="text-blue-800 text-lg font-bold mb-2">C# for Beginners</h2>
-    <p class="text-sm text-gray-600">C# cho người mới bắt đầu</p>
-    <p class="text-yellow-500 text-sm">⭐⭐⭐⭐⭐ 4.9</p>
-    <p class="text-red-600 font-bold mt-2">499,000 đ <span class="line-through text-gray-400 text-sm">720,000 đ</span></p>
-  </div>
-  <!-- Card 2 -->
-  <div class="bg-white rounded-lg shadow-md p-4">
-    <h2 class="text-blue-800 text-lg font-bold mb-2">Object Oriented Programming</h2>
-    <p class="text-sm text-gray-600">Lập trình hướng đối tượng trong C++</p>
-    <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.4</p>
-    <p class="text-green-600 font-bold mt-2">Miễn phí</p>
-  </div>
-  <!-- Card 3 -->
-  <div class="bg-white rounded-lg shadow-md p-4">
-    <h2 class="text-blue-800 text-lg font-bold mb-2">Standard Template Library</h2>
-    <p class="text-sm text-gray-600">Thư viện chuẩn C++</p>
-    <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.3</p>
-    <p class="text-green-600 font-bold mt-2">Miễn phí</p>
-  </div>
-  <!-- Card 4 -->
-  <div class="bg-white rounded-lg shadow-md p-4">
-    <h2 class="text-orange-600 text-lg font-bold mb-2">Java Basic</h2>
-    <p class="text-sm text-gray-600">Java cơ bản</p>
-    <p class="text-yellow-500 text-sm">⭐⭐⭐⭐ 4.6</p>
-    <p class="text-green-600 font-bold mt-2">Miễn phí</p>
-  </div>
+    <img src="robot-banner.png" alt="Robot" class="w-36 md:w-48"/>
 </section>
-<h3>Danh sách khóa học đang bán</h3>
 
-@* Nếu là Student *@
-@if (User.IsInRole("Student"))
-{
-    <h4>Khóa học của bạn</h4>
-  <a href="@Url.Action("Index", "Course")" class="btn btn-primary">Xem các khóa học của bạn</a>
-}
+<!-- Tabs -->
+<section class="mt-8 mx-6">
+    <div class="flex space-x-6 text-blue-700 font-semibold border-b border-gray-200">
+        <button class="pb-2 border-b-2 border-blue-700">🎯 Khóa học gợi ý</button>
+        <button class="pb-2 hover:border-b-2 hover:border-blue-400 transition">📚 Đang học (2)</button>
+        <button class="pb-2 hover:border-b-2 hover:border-blue-400 transition">✅ Hoàn thành (1)</button>
+    </div>
+</section>
 
-@* Nếu là Teacher *@
-@if (User.IsInRole("Teacher"))
-{
-    <h4>Quản lý khóa học của bạn</h4>
-  <a href="@Url.Action("Index", "Course")" class="btn btn-primary">Xem các khóa học của bạn</a>
-}
+<!-- Danh sách khóa học đã duyệt -->
+<section class="bg-white mx-6 mb-6 mt-2 rounded-xl shadow p-6">
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">🎓 Danh sách khóa học đã duyệt</h3>
 
-@* Nếu là Admin *@
-@if (User.IsInRole("Admin"))
-{
-    <h4>Khóa học cần duyệt</h4>
-  <a href="@Url.Action("Index", "Course")" class="btn btn-primary">Xem các khóa học của bạn</a>
-}
+    @if (Model != null && Model.Any())
+    {
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 p-6">
+            @foreach (var course in Model.Where(c => c.Status == CourseStatus.Approved))
+            {
+                <div class="bg-white rounded-xl shadow p-4 hover:shadow-lg transition">
+                    <div class="course-image-container mb-3">
+                        <img src="@course.ImageUrl" class="img-fluid rounded-3" alt="Course Image"/>
+                    </div>
+                    <h5 class="text-blue-800 font-bold mb-2">@course.Title</h5>
+                    <p class="text-sm text-gray-600">@course.Description</p>
+                    <p class="text-yellow-500 text-sm mt-1">⭐⭐⭐⭐⭐ 4.9</p> <!-- Bạn có thể thay rating bằng dữ liệu thực -->
+                    <p class="text-red-600 font-bold mt-2">@course.Price.ToString("N0") VNĐ</p>
+
+                    <div class="mt-3">
+                        <a href="@Url.Action("Details", "Course", new { id = course.CourseId })" class="btn btn-info btn-sm btn-custom">Xem chi tiết</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center">Hiện chưa có khóa học nào được duyệt.</div>
+    }
+</section>
+
+<!-- Dynamic Role Sections -->
+<section class="bg-white mx-6 mb-6 mt-2 rounded-xl shadow p-6">
+    <h3 class="text-xl font-semibold text-gray-800 mb-4">🎓 Danh sách khóa học đang bán</h3>
+
+    @if (User.IsInRole("Student"))
+    {
+        <div class="mb-4">
+            <h4 class="text-blue-600 font-semibold mb-2">📘 Khóa học của bạn</h4>
+            <a href="@Url.Action("Index", "Course")" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition">Xem khóa học</a>
+        </div>
+    }
+
+    @if (User.IsInRole("Teacher"))
+    {
+        <div class="mb-4">
+            <h4 class="text-green-600 font-semibold mb-2">🧑‍🏫 Quản lý khóa học</h4>
+            <a href="@Url.Action("Index", "Course")" class="bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg transition">Xem khóa học</a>
+        </div>
+    }
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="mb-4">
+            <h4 class="text-red-600 font-semibold mb-2">🛠️ Khóa học cần duyệt</h4>
+            <a href="@Url.Action("Index", "Course")" class="bg-red-600 hover:bg-red-700 text-white px-5 py-2 rounded-lg transition">Quản lý khóa học</a>
+        </div>
+    }
+</section>
+
 </body>
 </html>
